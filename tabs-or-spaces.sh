@@ -1,46 +1,70 @@
 #!/bin/bash
 
-LANGUAGES=("java")
-LANGUAGE_INDETS=()
+languages=("javascript")
+indents=()
 
-for LANGUAGE in ${LANGUAGES}
-do
-	URL="https://api.github.com/search/repositories?q=+language:${LANGUAGE}&sort=stars&order=desc"
-	TOP_REPOS=$(curl ${URL} -s -G -k | jq -r '.items[] | .full_name') 
-
-	for REPO in ${TOP_REPOS}
+function analyse_languages() {
+	for language in ${languages}
 	do
-		echo $REPO
+		top_repos=$(get_top_repos $language)
+		analyse_repos $language $top_repos
+	done
+}
 
-		TABS=0
-		SPACES=0
+function analyse_repos() {
+	for repo in ${top_repos}
+	do
+		echo $repo
 
-		FILES=$(curl -s -G -k "https://api.github.com/search/code?q=repo:${REPO}+language:${LANGUAGE}" | jq -r '.items[] | .path')
+		analyse_files $language $repo
 
-		for FILE in ${FILES}
-		do
-			echo "-> $FILE"
+		echo $indents
+	done
+}
 
-			CONTENT=$(curl -s -G -k "https://raw.githubusercontent.com/${REPO}/master/${FILE}")
-			INDENT=$(echo "${CONTENT}" | detect-indent | wc -m)
+function analyse_files() {
+	tabs=0
+	spaces=0
 
-			if [[ $INDENT =~ '1' ]]; then
-				TABS=$(( $TABS + 1 ))
-			else
-				SPACES=$(( $SPACES + 1 ))
-			fi
-		done
+	files=$(get_files $language $repo)
 
-		if [ $TABS -ge $SPACES ]; then
-			LANGUAGE_INDETS+=('TABS')
+	for file in ${files}
+	do
+		echo "-> $file"
+
+		content=$(curl -s -G -k "https://raw.githubusercontent.com/${2}/master/${file}")
+		indent=$(echo "${content}" | detect-indent)
+
+		echo "$indent" | grep '\t'
+
+		if [[ $indent =~ '\t' ]]; then
+			tabs=$(( $tabs + 1 ))
 		else
-			LANGUAGE_INDETS+=('SPACES')
+			spaces=$(( $spaces + 1 ))
 		fi
-
-		echo $LANGUAGES
-		echo $LANGUAGE_INDETS
 	done
 
-	echo $LANGUAGES
-	echo $LANGUAGE_INDETS
-done
+	if [ $tabs -ge $spaces ]; then
+		indents+=('TABS')
+	else
+		indents+=('SPACES')
+	fi
+}
+
+function get_top_repos() {
+	echo $(curl "https://api.github.com/search/repositories?q=+language:${language}&sort=stars&order=desc" -s -G -k | jq -r '.items[] | .full_name')
+}
+
+function get_files() {
+	echo $(curl -s -G -k "https://api.github.com/search/code?q=repo:transferwise/log-it-down+language:javascript" | jq -r '.items[] | .path')
+}
+
+function main {
+	analyse_languages
+
+	echo $languages
+	echo $indents
+	echo $sizes
+}
+
+main
