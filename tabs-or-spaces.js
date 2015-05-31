@@ -1,90 +1,145 @@
-//var fs = require('fs');
-
-//var file = fs.readFileSync('foo.json', 'utf8');
-//var indent = detectIndent(file).indent || '    ';
-
 var https = require('https');
 var detectIndent = require('detect-indent');
+var _ = require('underscore');
+var program = require('commander');
+var fs = require('fs');
+
+program
+  .version('0.0.1')
+  .option('-l, --language [value]', 'A programming language to analyse')
+  .option('-t, --token [value]', 'GitHub token')
+  .option('-o, --output [value]', 'Location of the output file')
+  .parse(process.argv);
 
 function TabsOrSpaces() {
 
-	var languages = ['javascript'];
+	var token = program.token;
+	var language = program.language;
+	var output = program.output;
+
+	var reposLength;
+	var reposStats = {};
+	var results = [];
 
 	function analyseLanguages() {
-		var options = {
-			host: 'api.github.com',
-			path: '/search/repositories?q=+language:javascript&sort=stars&order=desc',
-			headers: {'user-agent': 'NodeJS HTTP Client'}
-		};
+		https.request(getOptions('api.github.com', '/search/repositories?q=+language:' + language + '&sort=stars&order=desc'), constructResponseAnd(analyseRepos)).end();
+	}
 
-		callback = function(response) {
-			var str = '';
+	function analyseRepos(response) {
+		var repos = JSON.parse(response).items;
 
-			response.on('data', function (chunk) {
-				str += chunk;
-			});
-			response.on('end', function () {
-				var repos = JSON.parse(str).items;
-				console.log(repos);
-
-				for (var i = 0; i < repos.length; i ++) {
-					analyseRepo(repos[i].full_name);
-				}
-			});
+		if (!repos) {
+			console.log('Wait 1 minute');
+			return;
 		}
-		https.request(options, callback).end();
+		reposLength = repos.length;
+
+		for (var i = 0; i < repos.length; i ++) {
+			analyseRepo(repos[i].full_name);
+		}
 	}
 
 	function analyseRepo(name) {
-		var options = {
-			host: 'api.github.com',
-			path: '/search/code?q=repo:' + name + '+language:javascript',
-			headers: {'user-agent': 'NodeJS HTTP Client'}
+		reposStats[name] = {
+			types: [],
+			amounts: []
 		};
-
-		callback = function(response) {
+		var callback = function (response) {
 			var str = '';
 
 			response.on('data', function (chunk) {
 				str += chunk;
 			});
 			response.on('end', function () {
-				var files = JSON.parse(str).items;
-
-				for (var i = 0; i < files.length; i ++) {
-					analyseFile(files[i].path);
-				}
+				analyseFiles(name, str);
 			});
-		}
-		https.request(options, callback).end();
+		};
+		https.request(getOptions('api.github.com', '/search/code?q=repo:' + name + '+language:' + language), callback).end();
 	}
 
-	function analyseFile(repo, path) {
-		var options = {
-			host: 'raw.githubusercontent.com',
-			path: '/' + repo + '/' + path,
-			headers: {'user-agent': 'NodeJS HTTP Client'}
-		};
-		callback = function(response) {
+	function analyseFiles(repo, response) {
+		var files = JSON.parse(response).items;
+
+		if (!files) {
+			reposLength --;
+			console.log(response);
+			return;
+		}
+		reposStats[repo].files = files.length;
+
+		for (var i = 0; i < files.length; i ++) {
+			analyseFile(files[i]);
+		}
+	}
+
+	function analyseFile(file) {
+		var callback = function (response) {
 			var str = '';
 
 			response.on('data', function (chunk) {
 				str += chunk;
 			});
 			response.on('end', function () {
-				console.log(detectIndent(str).type);
+				detectFileIndent(file.repository.full_name, str);
+			});
+		};
+		https.request(getOptions('raw.githubusercontent.com', '/' + file.repository.full_name + '/master/' + file.path), callback).end();
+	}
+
+	function detectFileIndent(repo, response) {
+		var indent = detectIndent(response);
+
+		if (indent.type !== null) {
+			reposStats[repo].types.push(indent.type);
+			reposStats[repo].amounts.push(indent.amount);
+		}
+		reposStats[repo].files -= 1;
+
+		if (reposStats[repo].files === 0) {
+			results.push({
+				repo: repo,
+				type: _.chain(reposStats[repo].types).countBy().pairs().max(_.last).head().value(),
+				amount: _.chain(reposStats[repo].amounts).countBy().pairs().max(_.last).head().value()
 			});
 		}
-		https.request(options, callback).end();
+		if (results.length === reposLength) {
+			fs.writeFile(output, JSON.stringify(results, null, 2), function(err) {
+		    	console.timeEnd('Time');
+			}); 
+		}
+	}
+
+	function getOptions(host, path) {
+		return {
+			host: host,
+			path: path,
+			headers: {
+				'user-agent': 'NodeJS HTTP Client',
+				'Authorization': 'token ' + token
+			}
+		};
+	}
+
+	function constructResponseAnd(callback) {
+		return function (response) {
+			var str = '';
+
+			response.on('data', function (chunk) {
+				str += chunk;
+			});
+			response.on('end', function () {
+				callback(str);
+			});
+		}
 	}
 
 	return {
 
 		go: function () {
+			console.time('Time');
 			analyseLanguages();
 		}
 	};
 };
 
 TabsOrSpaces().go();
-

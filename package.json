@@ -17,7 +17,10 @@
   },
   "homepage": "https://github.com/ukupat/tabs-or-spaces#readme",
   "dependencies": {
+    "commander": "^2.8.1",
     "detect-indent": "^3.0.1",
-    "https": "^1.0.0"
+    "fs": "0.0.2",
+    "https": "^1.0.0",
+    "underscore": "^1.8.3"
   }
 }
