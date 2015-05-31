@@ -3,6 +3,7 @@ var detectIndent = require('detect-indent');
 var _ = require('underscore');
 var program = require('commander');
 var fs = require('fs');
+var Spinner = require('cli-spinner').Spinner;
 
 program
   .version('0.0.1')
@@ -12,6 +13,8 @@ program
   .parse(process.argv);
 
 function TabsOrSpaces() {
+
+	var spinner = new Spinner('Analysing.. %s');
 
 	var token = program.token;
 	var language = program.language;
@@ -29,7 +32,8 @@ function TabsOrSpaces() {
 		var repos = JSON.parse(response).items;
 
 		if (!repos) {
-			console.log('Wait 1 minute');
+			console.log('\nWait 1 minute');
+			spinner.stop();
 			return;
 		}
 		reposLength = repos.length;
@@ -62,7 +66,6 @@ function TabsOrSpaces() {
 
 		if (!files) {
 			reposLength --;
-			console.log(response);
 			return;
 		}
 		reposStats[repo].files = files.length;
@@ -104,6 +107,8 @@ function TabsOrSpaces() {
 		}
 		if (results.length === reposLength) {
 			fs.writeFile(output, JSON.stringify(results, null, 2), function(err) {
+				spinner.stop();
+				console.log('\n');
 		    	console.timeEnd('Time');
 			}); 
 		}
@@ -136,7 +141,9 @@ function TabsOrSpaces() {
 	return {
 
 		go: function () {
+			spinner.start();
 			console.time('Time');
+
 			analyseLanguages();
 		}
 	};
