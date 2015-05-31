@@ -1,0 +1,23 @@
+{
+  "name": "tabs-or-spaces",
+  "version": "1.0.0",
+  "description": "",
+  "main": "tabs-or-spaces.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ukupat/tabs-or-spaces.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ukupat/tabs-or-spaces/issues"
+  },
+  "homepage": "https://github.com/ukupat/tabs-or-spaces#readme",
+  "dependencies": {
+    "detect-indent": "^3.0.1",
+    "https": "^1.0.0"
+  }
+}
