@@ -1,6 +1,7 @@
 import https from 'https';
 import detectIndent from 'detect-indent';
 import _ from 'underscore';
+import Promise from 'promise';
 
 export default function TabsOrSpaces(args) {
 
@@ -13,19 +14,25 @@ export default function TabsOrSpaces(args) {
     var reposStats = {};
     var results = [];
 
-    var callback;
+    var success, fail;
 
-    function analyseLanguageAnd(callbackMe) {
-        callback = callbackMe;
+    function analyseLanguage() {
+        return new Promise(function (resolve, reject) {
+            success = resolve;
+            fail = reject;
 
-        https.request(
-            getOptions('api.github.com', '/search/repositories?q=+language:' + language + '&sort=stars&order=desc' + '&page=' + page + '&per_page=' + perPage),
-            constructResponseAnd(analyseRepos)
-        ).end();
+            https.request(
+                getOptions('api.github.com', '/search/repositories?q=+language:' + language + '&sort=stars&order=desc' + '&page=' + page + '&per_page=' + perPage),
+                constructResponseAnd(analyseRepos)
+            ).end();
+        });
     }
 
     function analyseRepos(response) {
         var repos = JSON.parse(response).items;
+
+        if (!repos)
+            return fail(new Error('No repos returned from GitHub'));
 
         reposLength = repos.length;
 
@@ -50,13 +57,16 @@ export default function TabsOrSpaces(args) {
 
         reposStats[repo].files = files.length;
 
-        for (var i = 0; i < files.length; i++)
+        for (var i = 0; i < files.length; i ++)
             analyseFile(files[i]);
     }
 
     function analyseFile(file) {
+        if (/.min./.test(file.name))
+            return;
+
         var repoName = file.repository.full_name;
-        var options = getOptions('raw.githubusercontent.com', '/' + repoName + '/master/' + file.path);
+        var options = getOptions(encodeURIComponent('raw.githubusercontent.com', '/' + repoName + '/master/' + file.path));
 
         https.request(options, constructResponseAnd(detectFileIndent, repoName)).end();
     }
@@ -76,7 +86,7 @@ export default function TabsOrSpaces(args) {
             pushRepoStatistics(repo);
 
         if (results.length === reposLength)
-            callback(results);
+            return success(results);
     }
 
     function pushRepoStatistics(repo) {
@@ -115,7 +125,5 @@ export default function TabsOrSpaces(args) {
         }
     }
 
-    return {
-        analyseAnd: analyseLanguageAnd
-    };
+    return { analyse: analyseLanguage };
 }

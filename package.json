@@ -30,6 +30,7 @@
   "dependencies": {
     "detect-indent": "^3.0.1",
     "https": "^1.0.0",
+    "promise": "^7.0.4",
     "underscore": "^1.8.3"
   },
   "devDependencies": {

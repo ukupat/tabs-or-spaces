@@ -17,6 +17,10 @@ var _underscore = require('underscore');
 
 var _underscore2 = _interopRequireDefault(_underscore);
 
+var _promise = require('promise');
+
+var _promise2 = _interopRequireDefault(_promise);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function TabsOrSpaces(args) {
@@ -30,16 +34,21 @@ function TabsOrSpaces(args) {
     var reposStats = {};
     var results = [];
 
-    var callback;
+    var success, fail;
 
-    function analyseLanguageAnd(callbackMe) {
-        callback = callbackMe;
+    function analyseLanguage() {
+        return new _promise2.default(function (resolve, reject) {
+            success = resolve;
+            fail = reject;
 
-        _https2.default.request(getOptions('api.github.com', '/search/repositories?q=+language:' + language + '&sort=stars&order=desc' + '&page=' + page + '&per_page=' + perPage), constructResponseAnd(analyseRepos)).end();
+            _https2.default.request(getOptions('api.github.com', '/search/repositories?q=+language:' + language + '&sort=stars&order=desc' + '&page=' + page + '&per_page=' + perPage), constructResponseAnd(analyseRepos)).end();
+        });
     }
 
     function analyseRepos(response) {
         var repos = JSON.parse(response).items;
+
+        if (!repos) return fail(new Error('No repos returned from GitHub'));
 
         reposLength = repos.length;
 
@@ -67,8 +76,10 @@ function TabsOrSpaces(args) {
     }
 
     function analyseFile(file) {
+        if (/.min./.test(file.name)) return;
+
         var repoName = file.repository.full_name;
-        var options = getOptions('raw.githubusercontent.com', '/' + repoName + '/master/' + file.path);
+        var options = getOptions(encodeURIComponent('raw.githubusercontent.com', '/' + repoName + '/master/' + file.path));
 
         _https2.default.request(options, constructResponseAnd(detectFileIndent, repoName)).end();
     }
@@ -86,7 +97,7 @@ function TabsOrSpaces(args) {
 
         if (reposStats[repo].files === 0) pushRepoStatistics(repo);
 
-        if (results.length === reposLength) callback(results);
+        if (results.length === reposLength) return success(results);
     }
 
     function pushRepoStatistics(repo) {
@@ -125,7 +136,5 @@ function TabsOrSpaces(args) {
         };
     }
 
-    return {
-        analyseAnd: analyseLanguageAnd
-    };
+    return { analyse: analyseLanguage };
 }
