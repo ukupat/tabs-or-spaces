@@ -1,8 +1,25 @@
-import https from 'https';
-import detectIndent from 'detect-indent';
-import _ from 'underscore';
+'use strict';
 
-export default function TabsOrSpaces(args) {
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = TabsOrSpaces;
+
+var _https = require('https');
+
+var _https2 = _interopRequireDefault(_https);
+
+var _detectIndent = require('detect-indent');
+
+var _detectIndent2 = _interopRequireDefault(_detectIndent);
+
+var _underscore = require('underscore');
+
+var _underscore2 = _interopRequireDefault(_underscore);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function TabsOrSpaces(args) {
 
     var token = args.githubToken;
     var language = args.language;
@@ -18,7 +35,7 @@ export default function TabsOrSpaces(args) {
     function analyseLanguageAnd(callbackMe) {
         callback = callbackMe;
 
-        https.request(getOptions('api.github.com', '/search/repositories?q=+language:' + language + '&sort=stars&order=desc' + '&page=' + page + '&per_page=' + perPage), constructResponseAnd(analyseRepos)).end();
+        _https2.default.request(getOptions('api.github.com', '/search/repositories?q=+language:' + language + '&sort=stars&order=desc' + '&page=' + page + '&per_page=' + perPage), constructResponseAnd(analyseRepos)).end();
     }
 
     function analyseRepos(response) {
@@ -26,13 +43,15 @@ export default function TabsOrSpaces(args) {
 
         reposLength = repos.length;
 
-        for (var i = 0; i < repos.length; i++) analyseRepo(repos[i].full_name);
+        for (var i = 0; i < repos.length; i++) {
+            analyseRepo(repos[i].full_name);
+        }
     }
 
     function analyseRepo(repoName) {
         reposStats[repoName] = { types: [], amounts: [] };
 
-        https.request(getOptions('api.github.com', '/search/code?q=repo:' + repoName + '+language:' + language), constructResponseAnd(analyseFiles, repoName)).end();
+        _https2.default.request(getOptions('api.github.com', '/search/code?q=repo:' + repoName + '+language:' + language), constructResponseAnd(analyseFiles, repoName)).end();
     }
 
     function analyseFiles(repo, response) {
@@ -42,18 +61,20 @@ export default function TabsOrSpaces(args) {
 
         reposStats[repo].files = files.length;
 
-        for (var i = 0; i < files.length; i++) analyseFile(files[i]);
+        for (var i = 0; i < files.length; i++) {
+            analyseFile(files[i]);
+        }
     }
 
     function analyseFile(file) {
         var repoName = file.repository.full_name;
         var options = getOptions('raw.githubusercontent.com', '/' + repoName + '/master/' + file.path);
 
-        https.request(options, constructResponseAnd(detectFileIndent, repoName)).end();
+        _https2.default.request(options, constructResponseAnd(detectFileIndent, repoName)).end();
     }
 
     function detectFileIndent(repo, response) {
-        saveStatistics(repo, detectIndent(response));
+        saveStatistics(repo, (0, _detectIndent2.default)(response));
     }
 
     function saveStatistics(repo, indent) {
@@ -71,8 +92,8 @@ export default function TabsOrSpaces(args) {
     function pushRepoStatistics(repo) {
         results.push({
             repo: repo,
-            type: _.chain(reposStats[repo].types).countBy().pairs().max(_.last).head().value(),
-            amount: _.chain(reposStats[repo].amounts).countBy().pairs().max(_.last).head().value()
+            type: _underscore2.default.chain(reposStats[repo].types).countBy().pairs().max(_underscore2.default.last).head().value(),
+            amount: _underscore2.default.chain(reposStats[repo].amounts).countBy().pairs().max(_underscore2.default.last).head().value()
         });
     }
 
