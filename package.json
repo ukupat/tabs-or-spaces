@@ -2,7 +2,14 @@
   "name": "tabs-or-spaces",
   "version": "1.0.0",
   "description": "Analyse which whitespace settings are used by top open-source repositories in GitHub",
-  "keywords": ["space", "tab", "whitespace", "statistics", "analyse", "es6"],
+  "keywords": [
+    "space",
+    "tab",
+    "whitespace",
+    "statistics",
+    "analyse",
+    "es6"
+  ],
   "author": [
     {
       "name": "Uku Pattak",
@@ -10,6 +17,10 @@
     }
   ],
   "main": "index.js",
+  "scripts": {
+      "prestart": "mkdir dist -p",
+      "start": "node_modules/.bin/babel src/TabsOrSpaces.js --watch --out-file dist/TabsOrSpaces.js"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -20,5 +31,8 @@
     "detect-indent": "^3.0.1",
     "https": "^1.0.0",
     "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.3.17"
   }
 }
