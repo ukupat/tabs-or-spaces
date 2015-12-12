@@ -1,25 +1,23 @@
 {
   "name": "tabs-or-spaces",
   "version": "1.0.0",
-  "description": "",
-  "main": "tabs-or-spaces.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "description": "Analyse which whitespace settings are used by top open-source repositories in GitHub",
+  "keywords": ["space", "tab", "whitespace", "statistics", "analyse", "es6"],
+  "author": [
+    {
+      "name": "Uku Pattak",
+      "email": "ukupat@gmail.com"
+    }
+  ],
+  "main": "index.js",
+  "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ukupat/tabs-or-spaces.git"
+    "url": "git://github.com/ukupat/tabs-or-spaces.git"
   },
-  "author": "",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/ukupat/tabs-or-spaces/issues"
-  },
-  "homepage": "https://github.com/ukupat/tabs-or-spaces#readme",
+  "homepage": "http://github.com/ukupat/tabs-or-spaces",
   "dependencies": {
-    "commander": "^2.8.1",
     "detect-indent": "^3.0.1",
-    "fs": "0.0.2",
     "https": "^1.0.0",
     "underscore": "^1.8.3"
   }
