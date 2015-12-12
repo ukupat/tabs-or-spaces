@@ -1,1 +1,1 @@
-return require('./dist/TabsOrSpaces').default;
+module.exports = require('./dist/TabsOrSpaces').default;
