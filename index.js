@@ -1,1 +1,1 @@
-return require('./dist/TabsOrSpaces');
+return require('./dist/TabsOrSpaces').default;
