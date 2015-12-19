@@ -53,20 +53,20 @@ export default function TabsOrSpaces(args) {
         var files = JSON.parse(response).items;
 
         if (!files)
-            return reposLength --;
+            return --reposLength;
 
         reposStats[repo].files = files.length;
 
         for (var i = 0; i < files.length; i ++)
-            analyseFile(files[i]);
+            analyseFile(files[i], repo);
     }
 
-    function analyseFile(file) {
+    function analyseFile(file, repo) {
         if (/.min./.test(file.name))
-            return;
+            return --reposStats[repo].files;
 
         var repoName = file.repository.full_name;
-        var options = getOptions(encodeURIComponent('raw.githubusercontent.com', '/' + repoName + '/master/' + file.path));
+        var options = getOptions('raw.githubusercontent.com', '/' + repoName + '/master/' + encodeURIComponent(file.path));
 
         https.request(options, constructResponseAnd(detectFileIndent, repoName)).end();
     }
@@ -80,7 +80,7 @@ export default function TabsOrSpaces(args) {
             reposStats[repo].types.push(indent.type);
             reposStats[repo].amounts.push(indent.amount);
         }
-        reposStats[repo].files -= 1;
+        reposStats[repo].files --;
 
         if (reposStats[repo].files === 0)
             pushRepoStatistics(repo);
