@@ -66,8 +66,10 @@ function TabsOrSpaces(args) {
     function analyseFiles(repo, response) {
         var files = JSON.parse(response).items;
 
-        if (!files) return --reposLength;
-
+        if (!files) {
+            reposLength -= 1;
+            return;
+        }
         reposStats[repo].files = files.length;
 
         for (var i = 0; i < files.length; i++) {
@@ -76,7 +78,7 @@ function TabsOrSpaces(args) {
     }
 
     function analyseFile(file, repo) {
-        if (/.min./.test(file.name)) return --reposStats[repo].files;
+        if (/\.min\./.test(file.name)) return saveStatistics(repo, { type: null });
 
         var repoName = file.repository.full_name;
         var options = getOptions('raw.githubusercontent.com', '/' + repoName + '/master/' + encodeURIComponent(file.path));
