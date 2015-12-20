@@ -66,7 +66,7 @@ function TabsOrSpaces(args) {
     function analyseFiles(repo, response) {
         var files = JSON.parse(response).items;
 
-        if (!files) {
+        if (!files || files.length === 0) {
             reposLength -= 1;
             return;
         }
@@ -78,8 +78,6 @@ function TabsOrSpaces(args) {
     }
 
     function analyseFile(file, repo) {
-        if (/\.min\./.test(file.name)) return saveStatistics(repo, { type: null });
-
         var repoName = file.repository.full_name;
         var options = getOptions('raw.githubusercontent.com', '/' + repoName + '/master/' + encodeURIComponent(file.path));
 
@@ -96,6 +94,8 @@ function TabsOrSpaces(args) {
             reposStats[repo].amounts.push(indent.amount);
         }
         reposStats[repo].files--;
+
+        if (repo === 'shadowsocks/shadowsocks') console.log(reposStats[repo].files);
 
         if (reposStats[repo].files === 0) pushRepoStatistics(repo);
 
