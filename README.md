@@ -1,3 +1,30 @@
-# Tabs or Spaces
+# Tabs or spaces
 
-NPM module for analysing which whitespace settings are used by top open-source repositories in GitHub based on main programming language.
+Module for analysing which whitespace types are used by top open source repositories in GitHub.
+
+## Installation
+
+Install [npm](http://blog.npmjs.org/post/85484771375/how-to-install-npm) and use it to install `tabs-or-spaces`
+
+```
+$ npm install tabs-or-spaces
+```
+
+## Usage
+TODO
+
+## Examples
+
+### JavaScript
+
+```javascript
+TabsOrSpaces({
+    language: 'javascript',
+    perPage: 30,
+    page: 2
+}).analyse().then(console.log).catch(console.log);
+```
+
+## License
+
+[MIT](//github.com/ukupat/tabs-or-spaces/blob/master/LICENSE)
