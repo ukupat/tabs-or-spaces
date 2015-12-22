@@ -95,8 +95,6 @@ function TabsOrSpaces(args) {
         }
         reposStats[repo].files--;
 
-        if (repo === 'shadowsocks/shadowsocks') console.log(reposStats[repo].files);
-
         if (reposStats[repo].files === 0) pushRepoStatistics(repo);
 
         if (results.length === reposLength) return success(results);
@@ -108,18 +106,22 @@ function TabsOrSpaces(args) {
             type: _underscore2.default.chain(reposStats[repo].types).countBy().pairs().max(_underscore2.default.last).head().value(),
             amount: _underscore2.default.chain(reposStats[repo].amounts).countBy().pairs().max(_underscore2.default.last).head().value()
         });
+
+        console.log('Repos done with ' + results.length + ' of ' + reposLength);
     }
 
     function getOptions(host, path, page) {
-        return {
+        var options = {
             host: host,
             path: path,
             page: page || 1,
             headers: {
-                'user-agent': 'NodeJS HTTP Client',
-                'Authorization': 'token ' + token
+                'user-agent': 'NodeJS HTTP Client'
             }
         };
+        if (token) options.headers.Authorization = 'token ' + token;
+
+        return options;
     }
 
     function constructResponseAnd(callback, extraParams) {
