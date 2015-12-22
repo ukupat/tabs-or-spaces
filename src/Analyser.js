@@ -3,17 +3,17 @@ import Firebase from 'firebase';
 
 export default class Analyser {
 
-    constructor(language, firebaseUrl, token) {
+    constructor(language, firebaseUrl, firebaseToken, githubToken) {
         this.unresolved = [];
         this.language = language;
         this.ref = new Firebase(firebaseUrl);
-        this.ref.authWithCustomToken(token, function(error, authData) {
-            if (error)
-                console.log(error);
-        });
+        this.firebaseToken = firebaseToken;
+        this.githubToken = githubToken;
     }
 
     startAnalysing() {
+        this.ref.authWithCustomToken(this.firebaseToken, function(error, authData) {});
+
         console.log('Contacting Firebase');
 
         this.ref.on('value', (snapshot) => this.beginAnalyseWith(snapshot));
@@ -46,7 +46,7 @@ export default class Analyser {
 
     options() {
         return {
-            githubToken: '89cd377d545b23ac7ad0ab26eead7a20aead3dbf',
+            githubToken: this.githubToken,
             language: this.language,
             perPage: this.analyseRepos,
             page: this.snapshot.analysedRepos ? this.snapshot.analysedRepos / 30 + 1 : 1
