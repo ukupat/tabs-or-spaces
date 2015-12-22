@@ -35,6 +35,7 @@
   },
   "devDependencies": {
     "babel-cli": "^6.3.17",
-    "babel-preset-es2015": "^6.3.13"
+    "babel-preset-es2015": "^6.3.13",
+    "firebase": "^2.3.2"
   }
 }

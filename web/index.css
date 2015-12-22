@@ -75,6 +75,19 @@ header h3 {
     font-size: 40px;
     font-weight: 500;
 }
+@media (max-width: 400px) {
+    header h1 {
+        font-size: 130px;
+    }
+
+    header .vs h2 {
+        font-size: 25px;
+    }
+
+    header h3 {
+        bottom: 10px;
+    }
+}
 .loading {
     text-align: center;
     color: #eee;

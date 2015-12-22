@@ -30,10 +30,7 @@
 
         for (var key in db)
             if (db.hasOwnProperty(key))
-                languages.push({
-                    name: key,
-                    analysedReposAmount: _.sum(_.values(db[key]['2015-12'].stylesCount))
-                });
+                languages.push({ name: key, analysedReposAmount: _.sum(_.values(db[key]['2015-12'].stylesCount)) });
 
         return languages;
     }
@@ -48,16 +45,14 @@
         var amount = _.sum(_.values(stats));
         var data = [];
 
-        for (var style in stats) {
-            if (!stats.hasOwnProperty(style))
-                continue;
+        for (var style in stats)
+            if (stats.hasOwnProperty(style))
+                data.push({
+                    value: calculatePercentage(amount, stats[style]),
+                    color: colors[style],
+                    label: labels[style]
+                });
 
-            data.push({
-                value: calculatePercentage(amount, stats[style]),
-                color: colors[style],
-                label: labels[style]
-            });
-        }
         var ctx = document.getElementById(language + 'Chart').getContext('2d');
 
         new Chart(ctx).Pie(data, {
