@@ -1,6 +1,8 @@
 # Tabs or spaces
 
-Module for analysing which whitespace types are used by top open source repositories in GitHub.
+Module for analysing which whitespace types are used by the top starred repositories in GitHub.
+
+[Check out the results](http://ukupat.github.io/tabs-or-spaces/)
 
 ## Installation
 
