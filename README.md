@@ -11,9 +11,6 @@ $ npm install tabs-or-spaces
 ```
 
 ## Usage
-TODO
-
-## Examples
 
 ### JavaScript
 
