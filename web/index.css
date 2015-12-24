@@ -119,8 +119,14 @@ header h3 {
 .legend .spaces-2 {
     color: #19ac70;
 }
+.legend .spaces-3 {
+    color: #08784a;
+}
 .legend .spaces-4 {
     color: #6b9f97;
+}
+.legend .spaces-8 {
+    color: #96d3ca;
 }
 footer {
     margin: 50px 0 30px 0;

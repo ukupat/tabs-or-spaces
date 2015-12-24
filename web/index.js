@@ -2,13 +2,17 @@
     var colors = {
         'tab-1': '#a27eae',
         'space-2': '#19ac70',
-        'space-4': '#6b9f97'
+        'space-3': '#08784a',
+        'space-4': '#6b9f97',
+        'space-8': '#96d3ca'
     };
 
     var labels = {
         'tab-1': 'Tabs',
         'space-2': '2 Spaces',
-        'space-4': '4 Spaces'
+        'space-3': '3 Spaces',
+        'space-4': '4 Spaces',
+        'space-8': '8 Spaces'
     };
 
     new Firebase('https://tabs-or-spaces.firebaseio.com').on('value', function (snapshot) {
