@@ -98,7 +98,7 @@ header h3 {
 .legend {
     position: fixed;
     right: 40px;
-    bottom: 40px;
+    bottom: 20px;
     color: #999;
     font-size: 14px;
 }
@@ -128,12 +128,20 @@ header h3 {
 .legend .spaces-8 {
     color: #96d3ca;
 }
+.legend iframe {
+    margin-top: 20px;
+}
 footer {
     margin: 50px 0 30px 0;
     text-align: center;
 }
 footer iframe {
     margin-bottom: 30px;
+}
+@media (min-width: 599px) {
+    footer iframe {
+        display: none;
+    }
 }
 footer a {
     color: #999;
