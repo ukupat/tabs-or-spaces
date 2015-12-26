@@ -172,6 +172,17 @@
                     'tab-1': 30
                 }
             }
+        },
+        'rust': {
+            '2015-12': {
+                'analysedRepos': 360,
+                'stylesCount': {
+                    'space-2': 20,
+                    'space-3': 2,
+                    'space-4': 323,
+                    'tab-1': 10
+                }
+            }
         }
     };
 

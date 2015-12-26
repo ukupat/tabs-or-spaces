@@ -1,4 +1,5 @@
 import {File} from './Database';
+import Analyser from './Analyser';
 
 let language = 'language';
 let db = new File('File path and name where to save the results');
