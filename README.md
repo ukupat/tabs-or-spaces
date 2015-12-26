@@ -4,24 +4,12 @@ Module for analysing which whitespace types are used by the top starred reposito
 
 [Check out the results](http://ukupat.github.io/tabs-or-spaces/)
 
-## Installation
+## How to use it
 
-Install [npm](http://blog.npmjs.org/post/85484771375/how-to-install-npm) and use it to install `tabs-or-spaces`
+Open up the `src/Boss.js` and fill up the `let` variables. After that install the dependencies and start the research.
 
 ```
-$ npm install tabs-or-spaces
-```
-
-## Usage
-
-### JavaScript
-
-```javascript
-TabsOrSpaces({
-    language: 'javascript',
-    perPage: 30,
-    page: 2
-}).analyse().then(console.log).catch(console.log);
+$ npm install && npm start
 ```
 
 ## License

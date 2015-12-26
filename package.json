@@ -1,6 +1,6 @@
 {
   "name": "tabs-or-spaces",
-  "version": "1.2.3",
+  "version": "2.0.0",
   "description": "Analyse which whitespace settings are used by top open-source repositories in GitHub",
   "keywords": [
     "space",
@@ -16,7 +16,6 @@
       "email": "ukupat@gmail.com"
     }
   ],
-  "main": "index.js",
   "scripts": {
     "start": "node_modules/.bin/babel-node src/Boss.js"
   },
