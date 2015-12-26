@@ -141,6 +141,16 @@
             'tab-1' : 5
           }
         }
+      },
+      'F#': {
+          "2015-12" : {
+            "analysedRepos" : 180,
+            "stylesCount" : {
+              "space-2" : 25,
+              "space-3" : 1,
+              "space-4" : 148
+            }
+          }
       }
   };
 
