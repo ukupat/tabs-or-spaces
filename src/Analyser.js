@@ -1,29 +1,24 @@
 import TabsOrSpaces from './TabsOrSpaces';
-import Firebase from 'firebase';
 
 export default class Analyser {
 
-    constructor(language, firebaseUrl, firebaseToken, githubToken) {
-        this.unresolved = [];
+    constructor(language, db, githubToken) {
         this.language = language;
-        this.ref = new Firebase(firebaseUrl);
-        this.firebaseToken = firebaseToken;
+        this.db = db;
         this.githubToken = githubToken;
     }
 
     startAnalysing() {
-        this.ref.authWithCustomToken(this.firebaseToken, function(error, authData) {});
+        console.log('Contacting Database');
 
-        console.log('Contacting Firebase');
-
-        this.ref.on('value', (snapshot) => this.beginAnalyseWith(snapshot));
+        this.db.readAnd((snapshot) => this.beginAnalyseWith(snapshot));
     }
 
     beginAnalyseWith(snapshot) {
         console.log('Got results from Firebase');
-        console.log(snapshot.val());
+        console.log(snapshot);
 
-        this.snapshot = snapshot.val() || {};
+        this.snapshot = snapshot || {};
         this.analyseRepos = this.analyseHowManyRepos();
 
         if (!this.analyseRepos)
@@ -70,14 +65,12 @@ export default class Analyser {
             else
                 stylesCount[type] = stylesCount[type] ? stylesCount[type] + 1 : 1;
         }
-        console.log('Saving info to Firebase');
+        console.log('Saving info to Database');
 
-        this.ref.set({
+        this.db.write({
             stylesCount: stylesCount,
-            analysedRepos: analysedRepos,
-            unresolvedRepos: unresolved
+            analysedRepos: analysedRepos
         });
-        process.exit();
     }
 
     handleShitStorm(error) {

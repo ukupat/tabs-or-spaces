@@ -162,6 +162,16 @@
                     'tab-1': 52
                 }
             }
+        },
+        'erlang': {
+            '2015-12': {
+                'analysedRepos': 420,
+                'stylesCount': {
+                    'space-2': 57,
+                    'space-4': 307,
+                    'tab-1': 30
+                }
+            }
         }
     };
 
