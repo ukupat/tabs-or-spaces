@@ -27,7 +27,7 @@ export default class Analyser {
         }
         console.log('Using TabsOrSpaces');
 
-        TabsOrSpaces(this.options()).analyse().then((results) => this.collectAndSave(results)).catch(this.handleShitStorm);
+        new TabsOrSpaces(this.options()).analyse().then((results) => this.collectAndSave(results)).catch(this.handleShitStorm);
     }
 
     analyseHowManyRepos() {
@@ -55,16 +55,10 @@ export default class Analyser {
 
         var analysedRepos = this.snapshot.analysedRepos ? this.snapshot.analysedRepos + this.analyseRepos : 30;
         var stylesCount = this.snapshot.stylesCount || {};
-        var topReposOfStyles = this.snapshot.topReposOfStyles || {}
 
         for (var i = 0; i < results.length; i ++) {
             var repo = results[i];
             var type = repo.type + '-' + repo.amount;
-
-            if (!topReposOfStyles[type])
-                topReposOfStyles[type] = [repo.repo];
-            else if (topReposOfStyles[type].length < 3)
-                topReposOfStyles[type].push(repo.repo);
 
             if (repo.type && repo.amount)
                 stylesCount[type] = stylesCount[type] ? stylesCount[type] + 1 : 1;
@@ -73,8 +67,7 @@ export default class Analyser {
 
         this.db.write({
             stylesCount: stylesCount,
-            analysedRepos: analysedRepos,
-            topReposOfStyles: topReposOfStyles
+            analysedRepos: analysedRepos
         });
     }
 
