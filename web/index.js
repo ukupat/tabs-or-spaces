@@ -245,6 +245,10 @@
             'space-3': 5,
             'space-4': 57,
             'space-8': 1,
+        },
+        'Crystal': {
+            'space-2': 119,
+            'space-4': 1,
         }
     };
 
