@@ -249,6 +249,18 @@
         'Crystal': {
             'space-2': 119,
             'space-4': 1,
+        },
+        'sas': {
+            'tab-1': 24,
+            'space-2': 7,
+            'space-3': 6,
+            'space-4': 6,
+        },
+        'PowerShell': {
+            'tab-1': 69,
+            'space-2': 35,
+            'space-3': 4,
+            'space-4': 325
         }
     };
 

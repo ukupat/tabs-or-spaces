@@ -9,13 +9,13 @@ export default class Analyser {
     }
 
     startAnalysing() {
-        console.log('Contacting Database');
+        console.log('Reading file');
 
         this.db.readAnd((snapshot) => this.beginAnalyseWith(snapshot));
     }
 
     beginAnalyseWith(snapshot) {
-        console.log('Got results from Firebase');
+        console.log('Got results from file');
         console.log(snapshot);
 
         this.snapshot = snapshot || {};
@@ -50,8 +50,7 @@ export default class Analyser {
     }
 
     collectAndSave(results) {
-        console.log('Got these results from TabsOrSpaces:');
-        console.log(results);
+        console.log('Got these results from TabsOrSpaces:', results);
 
         var analysedRepos = this.snapshot.analysedRepos ? this.snapshot.analysedRepos + this.analyseRepos : 30;
         var stylesCount = this.snapshot.stylesCount || {};
@@ -63,7 +62,7 @@ export default class Analyser {
             if (repo.type && repo.amount)
                 stylesCount[type] = stylesCount[type] ? stylesCount[type] + 1 : 1;
         }
-        console.log('Saving info to Database');
+        console.log('Saving info to file');
 
         this.db.write({
             stylesCount: stylesCount,
