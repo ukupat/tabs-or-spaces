@@ -143,7 +143,7 @@
             'space-4': 145,
             'tab-1': 149
         },
-        'nimrod': {
+        'nim': {
             'space-2': 220,
             'space-3': 2,
             'space-4': 73
