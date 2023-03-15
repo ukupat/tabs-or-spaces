@@ -5,7 +5,7 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
     <title>Tabs or Spaces</title>
-    <meta name="description" content="Top Github repos have been analysed to understand which whitespace types are most common in different programming languages">
+    <meta name="description" content="Top GitHub repos were analysed to understand which whitespace types are most common in different programming languages">
     <meta name="author" content="Uku Pattak">
 
     <link rel="shortcut icon" href="web/fav.png" type="image/png">
@@ -18,76 +18,27 @@
 <body>
     <header>
         <div class="pure-g">
-            <div class="pure-u-1-3">
-                <h1 class="tabs">\t</h1>
-            </div>
-            <div class="pure-u-1-3"></div>
-            <div class="pure-u-1-3">
-                <h1 class="spaces">\s</h1>
-            </div>
-
-            <div class="pure-u-1-3 long-title">
-                <h2>Tabs</h2>
-            </div>
-            <div class="pure-u-1-3 vs">
-                <h2>or</h2>
-            </div>
-            <div class="pure-u-1-3 long-title">
-                <h2>Spaces</h2>
-            </div>
+            <h1>
+                <span class="tabs">Tabs</span> or <span class="spaces">Spaces</span>
+            </h1>
         </div>
-        <h3>The Top Starred repositories in Github have been analysed to understand which are the most common whitespace types in different programming languages.</h3>
+        <h3>The Top Starred repositories on <a href="https://github.com">GitHub</a> were analysed in 2017 to find the most common type of indentation for different programming languages.</h3>
     </header>
 
     <main>
-        <section id="charts">
-            <div class="loading" v-bind:class="{ 'hide': languages}">
-                <i class="fa fa-refresh fa-spin"></i>
-            </div>
-            <div class="chart" v-for="language in languages | orderBy 'name'" v-bind:class="{ 'show': languages}">
-                <h2>
-                    <a href="https://github.com/search?l={{ encodeURIComponent(language.name) }}&q=stars%3A%3E1&s=stars&type=Repositories" target="_blank">
-                        {{ language.name }}
-                    </a>
-                </h2>
-                <h3>
-                    Analysed <span class="amount">{{ language.analysedReposAmount }}</span> repositories
-                </h3>
-
-                <canvas id="{{ language.name }}Chart" width="300" height="300"></canvas>
-            </div>
-        </section>
-
-        <section class="legend">
-            <div class="tab-1">
-                <i class="fa fa-circle"></i> Tabs
-            </div>
-            <div class="spaces-2">
-                <i class="fa fa-circle"></i> 2 Spaces
-            </div>
-            <div class="spaces-3">
-                <i class="fa fa-circle"></i> 3 Spaces
-            </div>
-            <div class="spaces-4">
-                <i class="fa fa-circle"></i> 4 Spaces
-            </div>
-            <div class="spaces-8">
-                <i class="fa fa-circle"></i> 8 Spaces
-            </div>
-            <iframe src="https://ghbtns.com/github-btn.html?user=ukupat&amp;repo=tabs-or-spaces&amp;type=star&amp;count=true&amp" frameborder="0" scrolling="0" width="100px" height="30px"></iframe>
-        </section>
+        <div class="chart">
+            <canvas id="Chart" height="1100"></canvas>
+        </div>
     </main>
 
     <footer>
         <iframe src="https://ghbtns.com/github-btn.html?user=ukupat&amp;repo=tabs-or-spaces&amp;type=star&amp;count=true&amp;size=large" frameborder="0" scrolling="0" width="140px" height="30px"></iframe>
-        <a href="https://github.com/ukupat/tabs-or-spaces/issues/new" target="_blank">Require an analysis for a new language</a>
+        <a href="https://github.com/ukupat/tabs-or-spaces/issues/new" target="_blank">Request an analysis for a new language</a>
         <a href="https://github.com/ukupat" target="_blank">Check out the author</a>
-        <a href="https://github.com/ukupat/tabs-or-spaces" target="_blank">Review the source code</a>
+        <a href="https://github.com/ukupat/tabs-or-spaces" target="_blank">View the source code</a>
     </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.11/vue.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/0.1.17/vue-resource.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
     <script src="web/index.js"></script>
 
